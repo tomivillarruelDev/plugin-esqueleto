@@ -26,6 +26,8 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
+declare( strict_types=1 );
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -57,7 +59,11 @@ spl_autoload_register( static function ( string $class ): void {
 	$file = $base_dir . str_replace( '\\', '/', substr( $class, $len ) ) . '.php';
 
 	if ( file_exists( $file ) ) {
-		require $file;
+		try {
+			require $file;
+		} catch ( \Throwable $e ) {
+			error_log( sprintf( '[MiPlugin Autoloader] Error cargando %s: %s', $file, $e->getMessage() ) );
+		}
 	}
 } );
 

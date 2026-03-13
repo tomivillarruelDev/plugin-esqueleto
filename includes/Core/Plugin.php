@@ -7,6 +7,8 @@
  * Todos los identificadores (text domain, tag del shortcode) vienen de Config.
  */
 
+declare( strict_types=1 );
+
 namespace MiPlugin\Core;
 
 use MiPlugin\Admin\AdminPage;
@@ -20,6 +22,7 @@ class Plugin {
 
 	public function run(): void {
 		$this->load_textdomain();
+		$this->register_core_hooks();
 		$this->register_admin_hooks();
 		$this->register_frontend_hooks();
 	}
@@ -28,6 +31,8 @@ class Plugin {
 	// Config::text_domain() devuelve el slug (= text domain por convención WP).
 	// Config::file() provee la ruta al archivo principal para plugin_basename().
 	private function load_textdomain(): void {
+		// WP 6.7+ carga el text domain automáticamente si coincide con el slug del plugin.
+		// Mantenemos el hook por compatibilidad con versiones anteriores.
 		add_action( 'init', static function (): void {
 			load_plugin_textdomain(
 				Config::text_domain(),
@@ -37,12 +42,21 @@ class Plugin {
 		} );
 	}
 
+	// ── Hooks de lógica central (AJAX, Settings API) ──────────────────────────
+	private function register_core_hooks(): void {
+		// AJAX Handler
+		$ajax = new Ajax();
+		$ajax->register();
+
+		// Settings API
+		if ( is_admin() ) {
+			$settings = new Settings();
+			add_action( 'admin_init', [ $settings, 'register' ] );
+		}
+	}
+
 	// ── Hooks del panel de administración ─────────────────────────────────────
 	private function register_admin_hooks(): void {
-		if ( ! is_admin() ) {
-			return;
-		}
-
 		$admin = new AdminPage();
 		add_action( 'admin_menu',            [ $admin, 'register_menu'  ] );
 		add_action( 'admin_enqueue_scripts', [ $admin, 'enqueue_assets' ] );
@@ -53,8 +67,12 @@ class Plugin {
 	// Ej: "mi_plugin" → [mi_plugin titulo="Hola"]
 	private function register_frontend_hooks(): void {
 		$frontend = new Frontend();
-		add_action( 'wp_enqueue_scripts', [ $frontend, 'enqueue_assets'   ] );
-		add_shortcode( Config::shortcode(), [ $frontend, 'render_shortcode' ] );
+		add_action( 'wp_enqueue_scripts', [ $frontend, 'register_assets' ] );
+
+		// El registro de shortcodes es preferible hacerlo en 'init'.
+		add_action( 'init', static function () use ( $frontend ): void {
+			add_shortcode( Config::shortcode(), [ $frontend, 'render_shortcode' ] );
+		} );
 	}
 }
 

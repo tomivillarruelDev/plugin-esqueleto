@@ -10,6 +10,8 @@
  * se obtienen de Config para evitar strings hardcodeados.
  */
 
+declare( strict_types=1 );
+
 namespace MiPlugin\Admin;
 
 use MiPlugin\Core\Config;

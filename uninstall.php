@@ -14,6 +14,8 @@
  * por eso se cargan Config y plugin.config.php con require_once manual.
  */
 
+declare( strict_types=1 );
+
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }

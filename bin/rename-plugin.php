@@ -77,6 +77,22 @@ $old_namespace = 'MiPlugin';   // PascalCase original
 $old_name      = 'Mi Plugin';  // Nombre legible original
 $old_prefix    = 'mi_plugin';  // snake_case original (derivado de old_slug)
 
+// ── 3.5 Validación de ejecución previa ───────────────────────────────────────
+
+$config_file = dirname( __DIR__ ) . DIRECTORY_SEPARATOR . 'plugin.config.php';
+if ( ! file_exists( $config_file ) ) {
+	fwrite( STDERR, "Error: No se encontró plugin.config.php.\n" );
+	exit( 1 );
+}
+
+$config_content = file_get_contents( $config_file );
+if ( strpos( $config_content, "'slug'    => '{$old_slug}'" ) === false ) {
+	echo "\n\033[1;33m[!] El plugin ya parece haber sido renombrado.\033[0m\n";
+	echo "No se encontró el slug original '{$old_slug}' en plugin.config.php.\n";
+	echo "Si querés volver a renombrarlo, hacelo manualmente en plugin.config.php.\n\n";
+	exit( 0 );
+}
+
 $new_prefix    = str_replace( '-', '_', $new_slug ); // eon_reservas
 
 // ── 4. Tabla de reemplazos ────────────────────────────────────────────────────
@@ -94,7 +110,7 @@ $replacements = [
 // ── 5. Configuración del procesamiento de archivos ────────────────────────────
 
 $root_dir   = dirname( __DIR__ );              // Raíz del plugin (un nivel arriba de bin/)
-$extensions = [ 'php', 'js', 'css', 'md' ];   // Tipos de archivo a procesar
+$extensions = [ 'php', 'js', 'css', 'md', 'json', 'svg', 'txt', 'xml' ];   // Tipos de archivo a procesar
 $skip_dirs  = [ '.git', 'bin', 'node_modules', 'vendor' ]; // Carpetas a ignorar
 
 $modified_files = [];

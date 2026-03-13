@@ -2,12 +2,11 @@
 /**
  * Frontend del plugin (sitio público).
  *
- *  - enqueue_assets()   : encola CSS y JS en todas las páginas públicas.
- *  - render_shortcode() : procesa el shortcode y devuelve HTML.
- *
- * Para cargar assets sólo en páginas específicas, condicioná enqueue_assets()
- * con is_page(), is_singular(), has_shortcode(), etc.
+ *  - register_assets()  : registra CSS/JS pero NO los encola todavía.
+ *  - render_shortcode() : procesa el shortcode y encola los assets sólo si se usa.
  */
+
+declare( strict_types=1 );
 
 namespace MiPlugin\Frontend;
 
@@ -20,20 +19,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Frontend {
 
 	/**
-	 * Encola CSS y JS en el frontend.
-	 * Hook: wp_enqueue_scripts
-	 *
-	 * Config::asset('public') → handle "mi-plugin-public"
+	 * Flag para evitar encolar assets múltiples veces si hay varios shortcodes.
 	 */
-	public function enqueue_assets(): void {
-		wp_enqueue_style(
+	private static bool $assets_enqueued = false;
+
+	/**
+	 * Registra CSS y JS en el frontend sin cargarlos aún.
+	 * Hook: wp_enqueue_scripts
+	 */
+	public function register_assets(): void {
+		wp_register_style(
 			Config::asset( 'public' ),
 			Config::url() . 'assets/css/public.css',
 			[],
 			Config::version()
 		);
 
-		wp_enqueue_script(
+		wp_register_script(
 			Config::asset( 'public' ),
 			Config::url() . 'assets/js/public.js',
 			[ 'jquery' ],
@@ -43,19 +45,20 @@ class Frontend {
 	}
 
 	/**
-	 * Procesa el shortcode registrado en Plugin::register_frontend_hooks().
+	 * Procesa el shortcode y encola los assets bajo demanda.
 	 *
-	 * Tag del shortcode: Config::shortcode() → "mi_plugin"
-	 * Uso:               [mi_plugin titulo="Hola" color="#e44d26"]
-	 *
-	 * WordPress reemplaza el shortcode en el contenido del post
-	 * por el string que retorna esta función (nunca echo directo).
-	 *
-	 * @param array|string $atts    Atributos del shortcode (WP puede pasar string vacío).
-	 * @param string       $content Contenido encerrado (shortcode de bloque).
+	 * @param array|string $atts    Atributos del shortcode.
+	 * @param string       $content Contenido encerrado.
 	 * @return string               HTML resultante.
 	 */
 	public function render_shortcode( $atts, string $content = '' ): string {
+		// Encolar assets registrados sólo cuando el shortcode está presente en la página.
+		if ( ! self::$assets_enqueued ) {
+			wp_enqueue_style( Config::asset( 'public' ) );
+			wp_enqueue_script( Config::asset( 'public' ) );
+			self::$assets_enqueued = true;
+		}
+
 		$atts = shortcode_atts(
 			[
 				'titulo' => __( 'Hola desde Mi Plugin', Config::text_domain() ),
@@ -64,6 +67,10 @@ class Frontend {
 			$atts,
 			Config::shortcode()
 		);
+
+		// Sanitización de atributos
+		$atts['titulo'] = sanitize_text_field( $atts['titulo'] );
+		$atts['color']  = sanitize_hex_color( $atts['color'] ) ?: '#000000';
 
 		ob_start();
 		include Config::dir() . 'views/frontend/shortcode.php';

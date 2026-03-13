@@ -24,6 +24,8 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
+declare( strict_types=1 );
+
 namespace MiPlugin\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -47,8 +49,17 @@ final class Config {
 	 * @param array<string,string> $cfg         Contenido de plugin.config.php.
 	 * @param string               $plugin_file Ruta de __FILE__ del plugin principal.
 	 *                                          Omitir sólo en uninstall.php.
+	 * @throws \RuntimeException Si ya fue inicializada o si el slug es inválido.
 	 */
 	public static function init( array $cfg, string $plugin_file = '' ): void {
+		if ( ! empty( self::$cfg ) ) {
+			return; // Evitar doble inicialización
+		}
+
+		if ( empty( $cfg['slug'] ) ) {
+			throw new \RuntimeException( '[Config] El "slug" es obligatorio en plugin.config.php.' );
+		}
+
 		self::$cfg  = $cfg;
 		self::$file = $plugin_file;
 	}
@@ -62,12 +73,12 @@ final class Config {
 
 	/** Nombre legible: "Mi Plugin" */
 	public static function name(): string {
-		return self::$cfg['name'];
+		return self::$cfg['name'] ?? '';
 	}
 
 	/** Versión semántica: "1.0.0" */
 	public static function version(): string {
-		return self::$cfg['version'];
+		return self::$cfg['version'] ?? '1.0.0';
 	}
 
 	// ── Rutas del sistema de archivos ─────────────────────────────────────────
@@ -109,8 +120,9 @@ final class Config {
 	 * Raíz del namespace PHP en PascalCase (sólo para referencia y js_object).
 	 * "mi-plugin" → "MiPlugin"
 	 *
-	 * IMPORTANTE: este método devuelve el valor ESPERADO del namespace.
-	 * El namespace real en los archivos PHP lo gestiona bin/rename-plugin.php.
+	 * NOTA DE DISEÑO: Este método es decorativo. No garantiza consistencia con
+	 * el namespace real de los archivos PHP, ya que los namespaces son estáticos.
+	 * El namespace real lo gestiona bin/rename-plugin.php al procesar los archivos.
 	 */
 	public static function namespace_root(): string {
 		return str_replace( ' ', '', ucwords( str_replace( '-', ' ', self::slug() ) ) );
@@ -177,7 +189,8 @@ final class Config {
 	 * bin/rename-plugin.php actualiza ambos de forma sincronizada.
 	 */
 	public static function js_object(): string {
-		return self::namespace_root() . 'Admin';
+		// Limpia el nombre para asegurar que sea una variable JS válida (sin backslashes de namespaces).
+		return preg_replace( '/[^a-zA-Z0-9]/', '', self::namespace_root() ) . 'Admin';
 	}
 
 	/**

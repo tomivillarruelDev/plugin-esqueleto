@@ -12,6 +12,8 @@
  * Config::cron_hook('cron_event') → "mi_plugin_cron_event"
  */
 
+declare( strict_types=1 );
+
 namespace MiPlugin\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
