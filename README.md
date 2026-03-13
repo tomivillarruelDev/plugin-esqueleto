@@ -49,14 +49,24 @@ plugin.config.php          ← ★ Única fuente de verdad en runtime
 	↓
 includes/Core/Config.php   ← Deriva todos los identificadores del slug
 	↓
-   Plugin.php              → Config::text_domain(), Config::shortcode()
-   Activator.php           → Config::option('version')
+   Plugin.php              → Orquestador: registra Ajax, Settings, Admin y Frontend
+   Activator.php           → Gestión de versiones y migraciones (version_compare)
    Deactivator.php         → Config::cron_hook('cron_event')
    AdminPage.php           → Config::menu_slug(), Config::asset(), Config::nonce()
-   Frontend.php            → Config::asset(), Config::shortcode()
-   views/admin/*.php       → Config::options_group(), Config::menu_slug()
-   uninstall.php           → Config::option('version'), Config::option('settings')
+   Frontend.php            → Sanitización de shortcode, assets condicionales
+   Ajax.php                → Handler centralizado con Nonce y Cap Check
+   Settings.php            → Implementación de Settings API (WP nativo)
+   uninstall.php           → Limpieza al eliminar usando Config::option()
 ```
+
+### Características Principales
+
+1. **Gestión de Versiones**: `Activator::activate()` detecta si es una instalación nueva o un upgrade usando `version_compare()`, facilitando futuras migraciones de base de datos.
+2. **AJAX Seguro**: La clase `Ajax.php` centraliza las peticiones. Incluye verificación de Nonce (`check_ajax_referer`) y de capacidades (`current_user_can`) por defecto.
+3. **Settings API**: Ejemplo completo en `Settings.php` para registrar secciones, campos y sanitizar opciones de forma nativa en WordPress.
+4. **Shortcode Robusto**: `Frontend::render_shortcode()` sanitiza atributos (`sanitize_hex_color`, `sanitize_text_field`) y utiliza una flag estática para evitar encolar assets innecesariamente.
+5. **Autoloader con Logging**: El autoloader en `plugin.php` captura errores de carga y los registra en el `error_log` del servidor para facilitar el debugging.
+6. **Script de Renombrado Protegido**: `bin/rename-plugin.php` valida si el plugin ya fue procesado para evitar corrupciones por ejecuciones accidentales.
 
 ### Qué controla cada mecanismo
 
@@ -83,9 +93,11 @@ plugin-esqueleto/
 ├── includes/
 │   ├── Core/
 │   │   ├── Config.php           ← Centraliza todos los identificadores
-│   │   ├── Plugin.php           ← Orquestador de hooks
-│   │   ├── Activator.php        ← Hook de activación
-│   │   └── Deactivator.php      ← Hook de desactivación
+│   │   ├── Plugin.php           ← Orquestador de hooks y módulos
+│   │   ├── Activator.php        ← Hook de activación y upgrade
+│   │   ├── Deactivator.php      ← Hook de desactivación
+│   │   ├── Ajax.php             ← Handler de peticiones AJAX (Ejemplo)
+│   │   └── Settings.php         ← Registro de opciones (Settings API)
 │   ├── Admin/
 │   │   └── AdminPage.php        ← Menú, assets y vista del wp-admin
 │   └── Frontend/
@@ -95,7 +107,7 @@ plugin-esqueleto/
 │   ├── admin/
 │   │   └── settings-page.php    ← Template HTML del panel de opciones
 │   └── frontend/
-│       └── shortcode.php        ← Template HTML del shortcode
+│       └── shortcode.php        ← Template HTML del shortcode (Escapado)
 │
 ├── assets/
 │   ├── css/
