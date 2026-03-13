@@ -30,7 +30,7 @@ Este script reemplaza en todos los archivos `.php`, `.js`, `.css` y `.md`:
 
 | Busca        | Reemplaza por   | Dónde aparece                         |
 |--------------|-----------------|---------------------------------------|
-| `MiPlugin`   | `MiNuevoPlugin` | namespace, use, autoloader, objeto JS |
+| `MyPlugin`   | `MiNuevoPlugin` | namespace, use, autoloader, objeto JS |
 | `mi-plugin`  | `mi-nuevo-plugin`| text domain, handles, URIs           |
 | `mi_plugin`  | `mi_nuevo_plugin`| opciones BD, nonces, cron hooks      |
 | `Mi Plugin`  | `Mi Nuevo Plugin`| header del plugin, menú admin         |

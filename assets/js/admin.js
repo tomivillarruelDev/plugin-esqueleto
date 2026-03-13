@@ -1,13 +1,13 @@
 /**
  * JavaScript del panel de administración.
  *
- * El objeto `MiPluginAdmin` es inyectado desde PHP con wp_localize_script()
+ * El objeto `MyPluginAdmin` es inyectado desde PHP con wp_localize_script()
  * a través de AdminPage::enqueue_assets() → Config::js_object().
  *
- *   MiPluginAdmin.ajax_url  → URL del endpoint AJAX de WordPress
- *   MiPluginAdmin.nonce     → Token de seguridad para peticiones AJAX
+ *   MyPluginAdmin.ajax_url  → URL del endpoint AJAX de WordPress
+ *   MyPluginAdmin.nonce     → Token de seguridad para peticiones AJAX
  *
- * IMPORTANTE: el nombre `MiPluginAdmin` se sincroniza automáticamente con
+ * IMPORTANTE: el nombre `MyPluginAdmin` se sincroniza automáticamente con
  * Config::js_object() al correr bin/rename-plugin.php.
  */
 

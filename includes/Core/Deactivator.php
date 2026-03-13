@@ -9,12 +9,12 @@
  *
  * NO eliminar datos del usuario aquí; eso corresponde a uninstall.php.
  *
- * Config::cron_hook('cron_event') → "mi_plugin_cron_event"
+ * Config::cron_hook('cron_event') → "my_plugin_cron_event"
  */
 
 declare( strict_types=1 );
 
-namespace MiPlugin\Core;
+namespace MyPlugin\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

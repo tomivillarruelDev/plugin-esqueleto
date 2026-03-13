@@ -12,9 +12,9 @@
 
 declare( strict_types=1 );
 
-namespace MiPlugin\Admin;
+namespace MyPlugin\Admin;
 
-use MiPlugin\Core\Config;
+use MyPlugin\Core\Config;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -45,9 +45,9 @@ class AdminPage {
 	 * Encola CSS y JS SÓLO cuando el usuario está en la página del plugin.
 	 * Hook: admin_enqueue_scripts
 	 *
-	 * Config::asset('admin')  → handle "mi-plugin-admin"
-	 * Config::js_object()     → nombre del objeto JS "MiPluginAdmin"
-	 * Config::nonce('admin')  → action del nonce "mi_plugin_admin"
+	 * Config::asset('admin')  → handle "my-plugin-admin"
+	 * Config::js_object()     → nombre del objeto JS "MyPluginAdmin"
+	 * Config::nonce('admin')  → action del nonce "my_plugin_admin"
 	 *
 	 * @param string $hook Slug de la página actual del wp-admin.
 	 */

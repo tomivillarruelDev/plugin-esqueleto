@@ -13,10 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<div class="mi-plugin-wrapper" style="color: <?php echo esc_attr( $atts['color'] ); ?>;">
-	<h2><?php echo esc_html( $atts['titulo'] ); ?></h2>
+<div class="my-plugin-wrapper" style="color: <?php echo esc_attr( $atts['color'] ); ?>;">
+	<h2><?php echo esc_html( $atts['title'] ); ?></h2>
 	<?php if ( $content ) : ?>
-		<div class="mi-plugin-content">
+		<div class="my-plugin-content">
 			<?php echo wp_kses_post( $content ); ?>
 		</div>
 	<?php endif; ?>

@@ -9,10 +9,10 @@
 
 declare( strict_types=1 );
 
-namespace MiPlugin\Core;
+namespace MyPlugin\Core;
 
-use MiPlugin\Admin\AdminPage;
-use MiPlugin\Frontend\Frontend;
+use MyPlugin\Admin\AdminPage;
+use MyPlugin\Frontend\Frontend;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -55,7 +55,7 @@ class Plugin {
 
 	// ── Hooks del frontend (sitio público) ────────────────────────────────────
 	// Config::shortcode() devuelve el tag del shortcode en snake_case.
-	// Ej: "mi_plugin" → [mi_plugin titulo="Hola"]
+	// Ej: "my_plugin" → [my_plugin title="Hola"]
 	private function register_frontend_hooks(): void {
 		$frontend = new Frontend();
 		add_action( 'wp_enqueue_scripts', [ $frontend, 'register_assets' ] );

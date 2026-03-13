@@ -10,23 +10,23 @@
  * uninstall.php antes de que el autoloader esté activo.
  *
  * ── TABLA DE DERIVACIONES ────────────────────────────────────────────────────
- *  slug       → "mi-plugin"      (configurado en plugin.config.php)
- *  prefix     → "mi_plugin"      (slug con guiones reemplazados por _)
- *  text_domain→ "mi-plugin"      (= slug, convención de WP)
- *  asset()    → "mi-plugin-{n}"  (slug + nombre del asset)
- *  option()   → "mi_plugin_{k}"  (prefix + clave)
- *  nonce()    → "mi_plugin_{n}"  (prefix + nombre)
- *  cron_hook()→ "mi_plugin_{n}"  (prefix + nombre)
- *  menu_slug()→ "mi-plugin-{p}"  (slug + página)
- *  options_group() → "mi_plugin_options_group"
- *  js_object()     → "MiPluginAdmin"   (namespace_root + "Admin")
- *  shortcode()     → "mi_plugin"       (= prefix)
+ *  slug       → "my-plugin"      (configurado en plugin.config.php)
+ *  prefix     → "my_plugin"      (slug con guiones reemplazados por _)
+ *  text_domain→ "my-plugin"      (= slug, convención de WP)
+ *  asset()    → "my-plugin-{n}"  (slug + nombre del asset)
+ *  option()   → "my_plugin_{k}"  (prefix + clave)
+ *  nonce()    → "my_plugin_{n}"  (prefix + nombre)
+ *  cron_hook()→ "my_plugin_{n}"  (prefix + nombre)
+ *  menu_slug()→ "my-plugin-{p}"  (slug + página)
+ *  options_group() → "my_plugin_options_group"
+ *  js_object()     → "MyPluginAdmin"   (namespace_root + "Admin")
+ *  shortcode()     → "my_plugin"       (= prefix)
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
 declare( strict_types=1 );
 
-namespace MiPlugin\Core;
+namespace MyPlugin\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

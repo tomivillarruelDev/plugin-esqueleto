@@ -3,7 +3,7 @@
  * Se cargan SÓLO en la página del plugin dentro del wp-admin.
  */
 
-.mi-plugin-wrapper {
+.my-plugin-wrapper {
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 4px;

@@ -19,7 +19,7 @@
  * ║    php bin/rename-plugin.php eon-reservas EonReservas "EON Reservas"    ║
  * ║                                                                         ║
  * ║  Qué hace este script:                                                  ║
- * ║    1. Reemplaza MiPlugin → <Namespace>  en todos los archivos PHP       ║
+ * ║    1. Reemplaza MyPlugin → <Namespace>  en todos los archivos PHP       ║
  * ║    2. Reemplaza mi-plugin → <slug>      en PHP, JS, CSS, MD             ║
  * ║    3. Reemplaza mi_plugin → <prefix>    (snake_case derivado del slug)  ║
  * ║    4. Reemplaza "Mi Plugin" → "<Nombre>" en todos los archivos          ║
@@ -62,7 +62,7 @@ if ( empty( $new_name ) ) {
 
 // ── 3. Valores Base ──────────────────────────────────────────────────────────
 $old_slug      = 'mi-plugin';
-$old_namespace = 'MiPlugin';
+$old_namespace = 'MyPlugin';
 $old_name      = 'Mi Plugin';
 $old_prefix    = 'mi_plugin';
 

@@ -1,16 +1,16 @@
 <?php
 /**
- * Plugin Name:       Mi Plugin
- * Plugin URI:        https://misitioweb.com/mi-plugin
+ * Plugin Name:       My Plugin
+ * Plugin URI:        https://mysitioweb.com/my-plugin
  * Description:       Descripción breve de lo que hace el plugin.
  * Version:           1.0.0
  * Requires at least: 5.8
  * Requires PHP:      7.4
- * Author:            Tu Nombre
- * Author URI:        https://misitioweb.com
+ * Author:            Your Name
+ * Author URI:        https://mysitioweb.com
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       mi-plugin
+ * Text Domain:       my-plugin
  * Domain Path:       /languages
  *
  * ─────────────────────────────────────────────────────────────────────────────
@@ -35,15 +35,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 // ── 1. Carga de Config ────────────────────────────────────────────────────────
 require_once __DIR__ . '/includes/Core/Config.php';
 
-\MiPlugin\Core\Config::init(
+\MyPlugin\Core\Config::init(
 	require __DIR__ . '/plugin.config.php',
 	__FILE__
 );
 
 // ── 2. Autoloader PSR-4 ────────────────────────────────────────────────────────
 spl_autoload_register( static function ( string $class ): void {
-	$namespace_root = 'MiPlugin\\';
-	$base_dir       = \MiPlugin\Core\Config::dir() . 'includes/';
+	$namespace_root = 'MyPlugin\\';
+	$base_dir       = \MyPlugin\Core\Config::dir() . 'includes/';
 	$len            = strlen( $namespace_root );
 
 	if ( strncmp( $namespace_root, $class, $len ) !== 0 ) {
@@ -56,16 +56,16 @@ spl_autoload_register( static function ( string $class ): void {
 		try {
 			require $file;
 		} catch ( \Throwable $e ) {
-			error_log( sprintf( '[MiPlugin Autoloader] Error cargando %s: %s', $file, $e->getMessage() ) );
+			error_log( sprintf( '[MyPlugin Autoloader] Error cargando %s: %s', $file, $e->getMessage() ) );
 		}
 	}
 } );
 
 // ── 3. Lifecycle Hooks ─────────────────────────────────────────────────────────
-register_activation_hook(   __FILE__, [ \MiPlugin\Core\Activator::class,   'activate'   ] );
-register_deactivation_hook( __FILE__, [ \MiPlugin\Core\Deactivator::class, 'deactivate' ] );
+register_activation_hook(   __FILE__, [ \MyPlugin\Core\Activator::class,   'activate'   ] );
+register_deactivation_hook( __FILE__, [ \MyPlugin\Core\Deactivator::class, 'deactivate' ] );
 
 // ── 4. Boot ────────────────────────────────────────────────────────────────────
 add_action( 'plugins_loaded', static function (): void {
-	( new \MiPlugin\Core\Plugin() )->run();
+	( new \MyPlugin\Core\Plugin() )->run();
 } );

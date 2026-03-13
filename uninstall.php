@@ -22,17 +22,17 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 // Carga de configuración
 require_once __DIR__ . '/includes/Core/Config.php';
-\MiPlugin\Core\Config::init(
+\MyPlugin\Core\Config::init(
 	require __DIR__ . '/plugin.config.php',
 	__FILE__
 );
 
 // Eliminar opciones del plugin
-delete_option( \MiPlugin\Core\Config::option( 'version' ) );
-delete_option( \MiPlugin\Core\Config::option( 'settings' ) );
+delete_option( \MyPlugin\Core\Config::option( 'version' ) );
+delete_option( \MyPlugin\Core\Config::option( 'settings' ) );
 
 // Si el plugin creó tablas propias, eliminarlas aquí:
 // global $wpdb;
 // $wpdb->query(
-//     'DROP TABLE IF EXISTS ' . $wpdb->prefix . \MiPlugin\Core\Config::prefix() . '_datos'
+//     'DROP TABLE IF EXISTS ' . $wpdb->prefix . \MyPlugin\Core\Config::prefix() . '_datos'
 // );

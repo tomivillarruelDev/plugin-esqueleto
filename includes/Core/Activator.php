@@ -8,13 +8,13 @@
  *   - Crear páginas o entradas iniciales.
  *   - Limpiar el caché de rewrite rules (flush_rewrite_rules).
  *
- * Config::option('version') → "mi_plugin_version"  (derivado del slug)
+ * Config::option('version') → "my_plugin_version"  (derivado del slug)
  * Config::version()         → "1.0.0"               (desde plugin.config.php)
  */
 
 declare( strict_types=1 );
 
-namespace MiPlugin\Core;
+namespace MyPlugin\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

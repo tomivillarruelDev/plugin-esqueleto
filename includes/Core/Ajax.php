@@ -5,7 +5,7 @@
 
 declare( strict_types=1 );
 
-namespace MiPlugin\Core;
+namespace MyPlugin\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -17,7 +17,7 @@ class Ajax {
 	 * Registra los hooks de AJAX.
 	 */
 	public function register(): void {
-		// Ejemplo de acción AJAX: mi_plugin_save_data
+		// Ejemplo de acción AJAX: my_plugin_save_data
 		// Config::prefix() . '_save_data'
 		$action = Config::prefix() . '_example_action';
 

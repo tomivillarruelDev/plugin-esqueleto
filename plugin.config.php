@@ -22,8 +22,8 @@
  */
 
 return [
-	'slug'    => 'mi-plugin',
-	'name'    => 'Mi Plugin',
+	'slug'    => 'my-plugin',
+	'name'    => 'My Plugin',
 	'version' => '1.0.0',
-	'author'  => 'Tu Nombre',
+	'author'  => 'Your Name',
 ];

@@ -4,11 +4,11 @@
  * Para optimizar, condicioná la carga sólo donde sea necesario.
  */
 
-.mi-plugin-wrapper {
+.my-plugin-wrapper {
   padding: 16px;
   margin: 16px 0;
 }
 
-.mi-plugin-content {
+.my-plugin-content {
   margin-top: 8px;
 }

@@ -5,7 +5,7 @@
 
 declare( strict_types=1 );
 
-namespace MiPlugin\Core;
+namespace MyPlugin\Core;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

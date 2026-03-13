@@ -8,9 +8,9 @@
 
 declare( strict_types=1 );
 
-namespace MiPlugin\Frontend;
+namespace MyPlugin\Frontend;
 
-use MiPlugin\Core\Config;
+use MyPlugin\Core\Config;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -61,7 +61,7 @@ class Frontend {
 
 		$atts = shortcode_atts(
 			[
-				'titulo' => __( 'Hola desde Mi Plugin', Config::text_domain() ),
+				'title' => __( 'Hola desde Mi Plugin', Config::text_domain() ),
 				'color'  => '#000000',
 			],
 			$atts,
@@ -69,7 +69,7 @@ class Frontend {
 		);
 
 		// Sanitización de atributos
-		$atts['titulo'] = sanitize_text_field( $atts['titulo'] );
+		$atts['title'] = sanitize_text_field( $atts['title'] );
 		$atts['color']  = sanitize_hex_color( $atts['color'] ) ?: '#000000';
 
 		ob_start();
