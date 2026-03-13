@@ -59,6 +59,17 @@ class Frontend {
 			self::$assets_enqueued = true;
 		}
 
+		// ── LÓGICA PERSONALIZADA ──────────────────────────────────────────────
+		// Agregá acá cualquier lógica condicional antes de renderizar la vista.
+		// Ejemplos:
+		//   - Consultas a la BD con WP_Query
+		//   - Validaciones de usuario o permisos
+		//   - Llamadas a APIs externas
+		//
+		// Para retornar vacío y no mostrar nada:
+		//   return '';
+		// ─────────────────────────────────────────────────────────────────────
+
 		$atts = shortcode_atts(
 			[
 				'title' => __( 'Hola desde Mi Plugin', Config::text_domain() ),
