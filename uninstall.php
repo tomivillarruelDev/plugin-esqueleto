@@ -20,16 +20,14 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-// Carga manual de Config (el autoloader no está disponible en este contexto).
+// Carga de configuración
 require_once __DIR__ . '/includes/Core/Config.php';
 \MiPlugin\Core\Config::init(
 	require __DIR__ . '/plugin.config.php',
 	__FILE__
 );
 
-// Eliminar opciones del plugin de la tabla wp_options.
-// Config::option('version')  → "mi_plugin_version"
-// Config::option('settings') → "mi_plugin_settings"
+// Eliminar opciones del plugin
 delete_option( \MiPlugin\Core\Config::option( 'version' ) );
 delete_option( \MiPlugin\Core\Config::option( 'settings' ) );
 

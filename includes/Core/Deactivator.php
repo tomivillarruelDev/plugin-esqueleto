@@ -23,9 +23,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Deactivator {
 
 	public static function deactivate(): void {
-		// Ejemplo: cancelar tareas programadas si el plugin las usa.
-		// wp_clear_scheduled_hook( Config::cron_hook( 'cron_event' ) );
-
 		flush_rewrite_rules();
 	}
 }

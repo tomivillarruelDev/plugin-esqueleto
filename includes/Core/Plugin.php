@@ -28,11 +28,7 @@ class Plugin {
 	}
 
 	// ── i18n ──────────────────────────────────────────────────────────────────
-	// Config::text_domain() devuelve el slug (= text domain por convención WP).
-	// Config::file() provee la ruta al archivo principal para plugin_basename().
 	private function load_textdomain(): void {
-		// WP 6.7+ carga el text domain automáticamente si coincide con el slug del plugin.
-		// Mantenemos el hook por compatibilidad con versiones anteriores.
 		add_action( 'init', static function (): void {
 			load_plugin_textdomain(
 				Config::text_domain(),
@@ -42,20 +38,15 @@ class Plugin {
 		} );
 	}
 
-	// ── Hooks de lógica central (AJAX, Settings API) ──────────────────────────
+	// ── Hooks ──────────────────────────────────────────────────────────────────
 	private function register_core_hooks(): void {
-		// AJAX Handler
-		$ajax = new Ajax();
-		$ajax->register();
+		( new Ajax() )->register();
 
-		// Settings API
 		if ( is_admin() ) {
-			$settings = new Settings();
-			add_action( 'admin_init', [ $settings, 'register' ] );
+			add_action( 'admin_init', [ new Settings(), 'register' ] );
 		}
 	}
 
-	// ── Hooks del panel de administración ─────────────────────────────────────
 	private function register_admin_hooks(): void {
 		$admin = new AdminPage();
 		add_action( 'admin_menu',            [ $admin, 'register_menu'  ] );

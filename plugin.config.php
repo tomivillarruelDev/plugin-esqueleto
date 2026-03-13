@@ -22,18 +22,8 @@
  */
 
 return [
-	// ── Obligatorio ──────────────────────────────────────────────────────────
-
-	// kebab-case. Controla: text-domain, handles de assets, slugs de menú,
-	// claves de opciones, nonces, hooks de cron, tag de shortcode.
 	'slug'    => 'mi-plugin',
-
-	// Nombre legible. Aparece en: menú del admin, títulos de página.
 	'name'    => 'Mi Plugin',
-
-	// Versión semántica. Se usa en el cache-busting de assets.
 	'version' => '1.0.0',
-
-	// ── Opcional ─────────────────────────────────────────────────────────────
 	'author'  => 'Tu Nombre',
 ];

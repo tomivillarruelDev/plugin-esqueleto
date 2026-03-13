@@ -27,17 +27,11 @@ class Activator {
 		$current_version   = Config::version();
 
 		if ( ! $installed_version ) {
-			// Primera instalación: registrar versión inicial.
 			add_option( Config::option( 'version' ), $current_version );
 		} elseif ( version_compare( (string) $installed_version, $current_version, '<' ) ) {
-			// Upgrade: Lógica para migraciones si fuera necesario en el futuro.
-			// Ej: self::run_migrations( $installed_version, $current_version );
-
 			update_option( Config::option( 'version' ), $current_version );
 		}
 
-		// Regenera las reglas de URL amigables para evitar errores 404
-		// si el plugin registra Custom Post Types o taxonomías.
 		flush_rewrite_rules();
 	}
 }
