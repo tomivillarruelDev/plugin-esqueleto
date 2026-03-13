@@ -13,24 +13,13 @@ cambiando la menor cantidad posible de archivos.
 cp -r plugin-esqueleto/ wp-content/plugins/my-new-plugin/
 ```
 
-### Paso 2 — Editá `plugin.config.php` ← **único archivo obligatorio**
-
-```php
-return [
-    'slug'    => 'my-new-plugin',   // kebab-case
-    'name'    => 'My New Plugin',   // Nombre legible
-    'version' => '1.0.0',
-    'author'  => 'Tu Nombre',
-];
-```
-
-### Paso 3 — Renombrá los namespaces PHP (un solo comando)
+### Paso 2 — Renombrá el plugin (un solo comando)
 
 ```bash
 php bin/rename-plugin.php my-new-plugin MyNewPlugin "My New Plugin"
 ```
 
-Este script reemplaza en todos los archivos `.php`, `.js`, `.css` y `.md`:
+Este script reemplaza automáticamente los identificadores en todos los archivos `.php`, `.js`, `.css` y `.md`, incluyendo la configuración y el archivo raíz:
 
 | Busca       | Reemplaza por   | Dónde aparece                         |
 | ----------- | --------------- | ------------------------------------- |
@@ -39,7 +28,20 @@ Este script reemplaza en todos los archivos `.php`, `.js`, `.css` y `.md`:
 | `my_plugin` | `my_new_plugin` | opciones BD, nonces, cron hooks       |
 | `My Plugin` | `My New Plugin` | header del plugin, menú admin         |
 
-Además renombra `plugin.php` → `my-new-plugin.php`.
+Además, el script renombra `plugin.php` → `my-new-plugin.php` y actualiza `plugin.config.php`.
+
+### Paso 3 — Editá `plugin.config.php` (Opcional)
+
+Si necesitás ajustar el autor o la versión, editá este archivo:
+
+```php
+return [
+    'slug'    => 'my-new-plugin',   // Ya actualizado por el script
+    'name'    => 'My New Plugin',   // Ya actualizado por el script
+    'version' => '1.0.0',
+    'author'  => 'Tu Nombre',
+];
+```
 
 ### Paso 4 — Activá el plugin
 
