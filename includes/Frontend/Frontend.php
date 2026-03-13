@@ -72,7 +72,7 @@ class Frontend {
 
 		$atts = shortcode_atts(
 			[
-				'title' => __( 'Hola desde Mi Plugin', Config::text_domain() ),
+				'title' => __( 'Hola desde My Plugin', Config::text_domain() ),
 				'color'  => '#000000',
 			],
 			$atts,

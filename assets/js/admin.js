@@ -18,7 +18,7 @@
 
 		// Ejemplo de petición AJAX al backend de WordPress.
 		// $.post( config.ajax_url, {
-		//     action: 'mi_plugin_accion',   // Debe coincidir con wp_ajax_{action}
+		//     action: 'my_plugin_accion',   // Debe coincidir con wp_ajax_{action}
 		//     nonce:  config.nonce,
 		//     dato:   'valor'
 		// } ).done( function ( response ) {
@@ -27,4 +27,4 @@
 
 	} );
 
-} )( jQuery, MiPluginAdmin );
+} )( jQuery, MyPluginAdmin );

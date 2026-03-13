@@ -20,9 +20,9 @@
  * ║                                                                         ║
  * ║  Qué hace este script:                                                  ║
  * ║    1. Reemplaza MyPlugin → <Namespace>  en todos los archivos PHP       ║
- * ║    2. Reemplaza mi-plugin → <slug>      en PHP, JS, CSS, MD             ║
- * ║    3. Reemplaza mi_plugin → <prefix>    (snake_case derivado del slug)  ║
- * ║    4. Reemplaza "Mi Plugin" → "<Nombre>" en todos los archivos          ║
+ * ║    2. Reemplaza my-plugin → <slug>      en PHP, JS, CSS, MD             ║
+ * ║    3. Reemplaza my_plugin → <prefix>    (snake_case derivado del slug)  ║
+ * ║    4. Reemplaza "My Plugin" → "<Nombre>" en todos los archivos          ║
  * ║    5. Actualiza plugin.config.php con los nuevos valores                ║
  * ║    6. Renombra plugin.php → <slug>.php                                  ║
  * ║                                                                         ║
@@ -61,10 +61,10 @@ if ( empty( $new_name ) ) {
 }
 
 // ── 3. Valores Base ──────────────────────────────────────────────────────────
-$old_slug      = 'mi-plugin';
+$old_slug      = 'my-plugin';
 $old_namespace = 'MyPlugin';
-$old_name      = 'Mi Plugin';
-$old_prefix    = 'mi_plugin';
+$old_name      = 'My Plugin';
+$old_prefix    = 'my_plugin';
 
 // ── 3.5 Check de ejecución previa ────────────────────────────────────────────
 $config_file = dirname( __DIR__ ) . DIRECTORY_SEPARATOR . 'plugin.config.php';

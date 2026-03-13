@@ -10,15 +10,15 @@ cambiando la menor cantidad posible de archivos.
 ### Paso 1 — Copiá la carpeta del template
 
 ```
-cp -r plugin-esqueleto/ wp-content/plugins/mi-nuevo-plugin/
+cp -r plugin-esqueleto/ wp-content/plugins/my-new-plugin/
 ```
 
 ### Paso 2 — Editá `plugin.config.php` ← **único archivo obligatorio**
 
 ```php
 return [
-    'slug'    => 'mi-nuevo-plugin',   // kebab-case
-    'name'    => 'Mi Nuevo Plugin',   // Nombre legible
+    'slug'    => 'my-new-plugin',   // kebab-case
+    'name'    => 'My New Plugin',   // Nombre legible
     'version' => '1.0.0',
     'author'  => 'Tu Nombre',
 ];
@@ -27,7 +27,7 @@ return [
 ### Paso 3 — Renombrá los namespaces PHP (un solo comando)
 
 ```bash
-php bin/rename-plugin.php mi-nuevo-plugin MiNuevoPlugin "Mi Nuevo Plugin"
+php bin/rename-plugin.php my-new-plugin MyNewPlugin "My New Plugin"
 ```
 
 Este script reemplaza en todos los archivos `.php`, `.js`, `.css` y `.md`:
@@ -39,7 +39,7 @@ Este script reemplaza en todos los archivos `.php`, `.js`, `.css` y `.md`:
 | `my_plugin` | `my_new_plugin` | opciones BD, nonces, cron hooks       |
 | `My Plugin` | `My New Plugin` | header del plugin, menú admin         |
 
-Además renombra `plugin.php` → `mi-nuevo-plugin.php`.
+Además renombra `plugin.php` → `my-new-plugin.php`.
 
 ### Paso 4 — Activá el plugin
 
@@ -161,7 +161,7 @@ Lo que no tocás: `assets_enqueued`, `register_assets()`, `shortcode_atts()` y l
 Lo único a documentar dentro de `render_shortcode()`, antes de `shortcode_atts()`, es este flujo:
 
 ```
-[mi_shortcode]                 <- el usuario pega esto en WordPress
+[my_shortcode]                 <- el usuario pega esto en WordPress
     |
     v
 Plugin.php -> add_shortcode() <- aca esta REGISTRADO

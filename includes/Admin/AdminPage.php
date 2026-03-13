@@ -26,8 +26,8 @@ class AdminPage {
 	 * Registra la página en el menú lateral del wp-admin.
 	 * Hook: admin_menu
 	 *
-	 * Config::menu_slug() → "mi-plugin-settings"
-	 * Config::name()      → "Mi Plugin"
+	 * Config::menu_slug() → "my-plugin-settings"
+	 * Config::name()      → "My Plugin"
 	 */
 	public function register_menu(): void {
 		add_menu_page(

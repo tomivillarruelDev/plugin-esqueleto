@@ -4,12 +4,12 @@
  *
  * Template puro: sólo HTML + PHP de presentación. La lógica en AdminPage.php.
  *
- * Config::options_group() → "mi_plugin_options_group"
+ * Config::options_group() → "my_plugin_options_group"
  * Config::menu_slug()     → "my-plugin-settings"
  * Config::text_domain()   → "my-plugin"
  */
 
-use MiPlugin\Core\Config;
+use MyPlugin\Core\Config;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

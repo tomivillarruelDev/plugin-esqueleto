@@ -9,6 +9,6 @@
   "use strict";
 
   $(document).ready(function () {
-    console.log("Mi Plugin Public listo.");
+    console.log("My Plugin listo.");
   });
 })(jQuery);
