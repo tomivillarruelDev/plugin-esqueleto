@@ -1,11 +1,17 @@
 <?php
 /**
- * Lógica del frontend (parte pública del sitio).
- *   - Encola los assets del tema/visita.
- *   - Procesa y devuelve el HTML del shortcode.
+ * Frontend del plugin (sitio público).
+ *
+ *  - enqueue_assets()   : encola CSS y JS en todas las páginas públicas.
+ *  - render_shortcode() : procesa el shortcode y devuelve HTML.
+ *
+ * Para cargar assets sólo en páginas específicas, condicioná enqueue_assets()
+ * con is_page(), is_singular(), has_shortcode(), etc.
  */
 
 namespace MiPlugin\Frontend;
+
+use MiPlugin\Core\Config;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -16,47 +22,51 @@ class Frontend {
 	/**
 	 * Encola CSS y JS en el frontend.
 	 * Hook: wp_enqueue_scripts
+	 *
+	 * Config::asset('public') → handle "mi-plugin-public"
 	 */
 	public function enqueue_assets(): void {
 		wp_enqueue_style(
-			'mi-plugin-public',
-			MI_PLUGIN_URL . 'assets/css/public.css',
+			Config::asset( 'public' ),
+			Config::url() . 'assets/css/public.css',
 			[],
-			MI_PLUGIN_VERSION
+			Config::version()
 		);
 
 		wp_enqueue_script(
-			'mi-plugin-public',
-			MI_PLUGIN_URL . 'assets/js/public.js',
+			Config::asset( 'public' ),
+			Config::url() . 'assets/js/public.js',
 			[ 'jquery' ],
-			MI_PLUGIN_VERSION,
+			Config::version(),
 			true
 		);
 	}
 
 	/**
-	 * Procesa el shortcode [mi_plugin atributo="valor"].
+	 * Procesa el shortcode registrado en Plugin::register_frontend_hooks().
+	 *
+	 * Tag del shortcode: Config::shortcode() → "mi_plugin"
+	 * Uso:               [mi_plugin titulo="Hola" color="#e44d26"]
 	 *
 	 * WordPress reemplaza el shortcode en el contenido del post
-	 * por lo que devuelva esta función.
+	 * por el string que retorna esta función (nunca echo directo).
 	 *
-	 * @param array  $atts    Atributos pasados en el shortcode.
-	 * @param string $content Contenido encerrado (si el shortcode es de bloque).
-	 * @return string         HTML resultante.
+	 * @param array|string $atts    Atributos del shortcode (WP puede pasar string vacío).
+	 * @param string       $content Contenido encerrado (shortcode de bloque).
+	 * @return string               HTML resultante.
 	 */
 	public function render_shortcode( $atts, string $content = '' ): string {
-		// shortcode_atts combina los atributos recibidos con los valores por defecto.
 		$atts = shortcode_atts(
 			[
-				'titulo' => __( 'Hola desde Mi Plugin', 'mi-plugin' ),
+				'titulo' => __( 'Hola desde Mi Plugin', Config::text_domain() ),
 				'color'  => '#000000',
 			],
 			$atts,
-			'mi_plugin'
+			Config::shortcode()
 		);
 
-		ob_start(); // Captura el HTML en lugar de imprimirlo directamente.
-		include MI_PLUGIN_DIR . 'views/frontend/shortcode.php';
+		ob_start();
+		include Config::dir() . 'views/frontend/shortcode.php';
 		return ob_get_clean();
 	}
 }

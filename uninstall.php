@@ -1,26 +1,38 @@
 <?php
 /**
- * Se ejecuta cuando el usuario ELIMINA el plugin desde el panel de WP
- * (Plugins → Eliminar), no cuando lo desactiva.
+ * Se ejecuta cuando el usuario ELIMINA el plugin (Plugins → Eliminar).
+ * NO se ejecuta al desactivar.
  *
- * Aquí sí corresponde borrar datos permanentes:
- *   - Tablas propias en la base de datos.
- *   - Opciones guardadas con add_option / update_option.
+ * Aquí corresponde borrar datos permanentes:
+ *   - Opciones en wp_options.
+ *   - Tablas propias creadas por el plugin.
  *   - Archivos subidos por el plugin.
  *
- * WordPress sólo ejecuta este archivo si:
- *   1. El plugin está desactivado.
- *   2. Se definió WP_UNINSTALL_PLUGIN (lo hace WP automáticamente).
+ * WordPress ejecuta este archivo sólo si WP_UNINSTALL_PLUGIN está definido.
+ *
+ * NOTA: Este archivo corre en AISLAMIENTO (sin pasar por plugin.php),
+ * por eso se cargan Config y plugin.config.php con require_once manual.
  */
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-	exit; // Impide ejecución directa.
+	exit;
 }
 
-// Elimina las opciones del plugin de la tabla wp_options.
-delete_option( 'mi_plugin_version' );
-delete_option( 'mi_plugin_settings' );
+// Carga manual de Config (el autoloader no está disponible en este contexto).
+require_once __DIR__ . '/includes/Core/Config.php';
+\MiPlugin\Core\Config::init(
+	require __DIR__ . '/plugin.config.php',
+	__FILE__
+);
 
-// Si el plugin usara tablas propias, aquí iría el DROP TABLE.
+// Eliminar opciones del plugin de la tabla wp_options.
+// Config::option('version')  → "mi_plugin_version"
+// Config::option('settings') → "mi_plugin_settings"
+delete_option( \MiPlugin\Core\Config::option( 'version' ) );
+delete_option( \MiPlugin\Core\Config::option( 'settings' ) );
+
+// Si el plugin creó tablas propias, eliminarlas aquí:
 // global $wpdb;
-// $wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}mi_plugin_datos" );
+// $wpdb->query(
+//     'DROP TABLE IF EXISTS ' . $wpdb->prefix . \MiPlugin\Core\Config::prefix() . '_datos'
+// );

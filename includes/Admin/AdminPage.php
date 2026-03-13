@@ -1,12 +1,18 @@
 <?php
 /**
- * Todo lo relacionado con el panel de administración:
- *   - Registro de páginas de opciones en el menú.
- *   - Carga de scripts y estilos del admin.
- *   - Renderizado de la vista HTML del panel.
+ * Panel de administración del plugin.
+ *
+ *  - register_menu()  : registra la entrada en el menú lateral del wp-admin.
+ *  - enqueue_assets() : encola CSS y JS SÓLO en la página del plugin.
+ *  - render_page()    : incluye la vista HTML separada de la lógica.
+ *
+ * Todos los identificadores (slug de menú, handles, nonce, objeto JS)
+ * se obtienen de Config para evitar strings hardcodeados.
  */
 
 namespace MiPlugin\Admin;
+
+use MiPlugin\Core\Config;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -14,69 +20,77 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class AdminPage {
 
-	// Slug único que identifica la página dentro del panel de WP.
-	private const MENU_SLUG = 'mi-plugin-settings';
-
 	/**
-	 * Registra la página en el menú lateral.
+	 * Registra la página en el menú lateral del wp-admin.
 	 * Hook: admin_menu
+	 *
+	 * Config::menu_slug() → "mi-plugin-settings"
+	 * Config::name()      → "Mi Plugin"
 	 */
 	public function register_menu(): void {
 		add_menu_page(
-			__( 'Mi Plugin', 'mi-plugin' ),          // Título de la pestaña del navegador
-			__( 'Mi Plugin', 'mi-plugin' ),          // Texto en el menú lateral
-			'manage_options',                         // Capacidad mínima para ver la página
-			self::MENU_SLUG,                          // Slug único de la página
-			[ $this, 'render_page' ],                 // Función que dibuja el HTML
-			'dashicons-admin-plugins',                // Icono del menú (Dashicon o URL)
-			80                                        // Posición en el menú
+			Config::name(),            // Título de pestaña del navegador
+			Config::name(),            // Texto en el menú lateral
+			'manage_options',          // Capacidad mínima requerida
+			Config::menu_slug(),       // Slug único de la página
+			[ $this, 'render_page' ],  // Callback que dibuja el HTML
+			'dashicons-admin-plugins', // Icono (Dashicon o URL de imagen)
+			80                         // Posición en el menú
 		);
 	}
 
 	/**
-	 * Encola los assets sólo cuando estamos en la página del plugin.
+	 * Encola CSS y JS SÓLO cuando el usuario está en la página del plugin.
 	 * Hook: admin_enqueue_scripts
 	 *
-	 * @param string $hook Slug de la página actual del admin.
+	 * Config::asset('admin')  → handle "mi-plugin-admin"
+	 * Config::js_object()     → nombre del objeto JS "MiPluginAdmin"
+	 * Config::nonce('admin')  → action del nonce "mi_plugin_admin"
+	 *
+	 * @param string $hook Slug de la página actual del wp-admin.
 	 */
 	public function enqueue_assets( string $hook ): void {
-		// Evita cargar assets en páginas ajenas al plugin.
-		if ( 'toplevel_page_' . self::MENU_SLUG !== $hook ) {
+		if ( 'toplevel_page_' . Config::menu_slug() !== $hook ) {
 			return;
 		}
 
 		wp_enqueue_style(
-			'mi-plugin-admin',
-			MI_PLUGIN_URL . 'assets/css/admin.css',
+			Config::asset( 'admin' ),
+			Config::url() . 'assets/css/admin.css',
 			[],
-			MI_PLUGIN_VERSION
+			Config::version()
 		);
 
 		wp_enqueue_script(
-			'mi-plugin-admin',
-			MI_PLUGIN_URL . 'assets/js/admin.js',
-			[ 'jquery' ],          // Dependencias
-			MI_PLUGIN_VERSION,
-			true                   // Cargar en el footer para mejor rendimiento
+			Config::asset( 'admin' ),
+			Config::url() . 'assets/js/admin.js',
+			[ 'jquery' ],
+			Config::version(),
+			true // Cargar en el footer para no bloquear el render
 		);
 
-		// Pasa variables de PHP a JavaScript de forma segura.
-		wp_localize_script( 'mi-plugin-admin', 'MiPluginAdmin', [
-			'ajax_url' => admin_url( 'admin-ajax.php' ),
-			'nonce'    => wp_create_nonce( 'mi_plugin_nonce' ),
-		] );
+		// Inyecta variables PHP → JS de forma segura.
+		// El nombre del objeto (Config::js_object()) debe coincidir
+		// con la referencia en assets/js/admin.js.
+		wp_localize_script(
+			Config::asset( 'admin' ),
+			Config::js_object(),
+			[
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( Config::nonce( 'admin' ) ),
+			]
+		);
 	}
 
 	/**
-	 * Renderiza la vista HTML del panel de administración.
-	 * Usa include para separar la lógica del HTML.
+	 * Renderiza la vista HTML del panel.
+	 * Verifica permisos antes de mostrar cualquier contenido (hardening).
 	 */
 	public function render_page(): void {
-		// Verifica permisos antes de mostrar cualquier contenido.
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'No tenés permisos para ver esta página.', 'mi-plugin' ) );
+			wp_die( esc_html__( 'No tenés permisos para ver esta página.', Config::text_domain() ) );
 		}
 
-		include MI_PLUGIN_DIR . 'views/admin/settings-page.php';
+		include Config::dir() . 'views/admin/settings-page.php';
 	}
 }

@@ -2,9 +2,9 @@
 /**
  * Clase orquestadora del plugin.
  *
- * Aquí se registran TODOS los hooks (acciones y filtros).
- * No contiene lógica de negocio propia; su único trabajo es conectar
- * los distintos módulos con los eventos de WordPress.
+ * Responsabilidad única: registrar todos los hooks de WordPress.
+ * No contiene lógica de negocio; conecta los módulos con los eventos de WP.
+ * Todos los identificadores (text domain, tag del shortcode) vienen de Config.
  */
 
 namespace MiPlugin\Core;
@@ -25,40 +25,36 @@ class Plugin {
 	}
 
 	// ── i18n ──────────────────────────────────────────────────────────────────
-	// Carga las traducciones del plugin desde la carpeta /languages.
-	// El Text Domain debe coincidir con el declarado en la cabecera del plugin.
+	// Config::text_domain() devuelve el slug (= text domain por convención WP).
+	// Config::file() provee la ruta al archivo principal para plugin_basename().
 	private function load_textdomain(): void {
-		add_action( 'init', function () {
+		add_action( 'init', static function (): void {
 			load_plugin_textdomain(
-				'mi-plugin',
+				Config::text_domain(),
 				false,
-				dirname( plugin_basename( MI_PLUGIN_FILE ) ) . '/languages'
+				dirname( plugin_basename( Config::file() ) ) . '/languages'
 			);
 		} );
 	}
 
-	// ── Hooks del panel de administración ────────────────────────────────────
+	// ── Hooks del panel de administración ─────────────────────────────────────
 	private function register_admin_hooks(): void {
 		if ( ! is_admin() ) {
 			return;
 		}
 
 		$admin = new AdminPage();
-
-		// Añade un elemento al menú lateral del panel.
-		add_action( 'admin_menu',    [ $admin, 'register_menu' ] );
-
-		// Encola CSS y JS sólo en las páginas del plugin (no en todo el admin).
+		add_action( 'admin_menu',            [ $admin, 'register_menu'  ] );
 		add_action( 'admin_enqueue_scripts', [ $admin, 'enqueue_assets' ] );
 	}
 
-	// ── Hooks del frontend (sitio público) ───────────────────────────────────
+	// ── Hooks del frontend (sitio público) ────────────────────────────────────
+	// Config::shortcode() devuelve el tag del shortcode en snake_case.
+	// Ej: "mi_plugin" → [mi_plugin titulo="Hola"]
 	private function register_frontend_hooks(): void {
 		$frontend = new Frontend();
-
-		add_action( 'wp_enqueue_scripts', [ $frontend, 'enqueue_assets' ] );
-
-		// Ejemplo: shortcode [mi_plugin]
-		add_shortcode( 'mi_plugin', [ $frontend, 'render_shortcode' ] );
+		add_action( 'wp_enqueue_scripts', [ $frontend, 'enqueue_assets'   ] );
+		add_shortcode( Config::shortcode(), [ $frontend, 'render_shortcode' ] );
 	}
 }
+
