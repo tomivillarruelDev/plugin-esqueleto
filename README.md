@@ -30,10 +30,10 @@ Este script reemplaza en todos los archivos `.php`, `.js`, `.css` y `.md`:
 
 | Busca        | Reemplaza por   | Dónde aparece                         |
 |--------------|-----------------|---------------------------------------|
-| `MyPlugin`   | `MiNuevoPlugin` | namespace, use, autoloader, objeto JS |
-| `mi-plugin`  | `mi-nuevo-plugin`| text domain, handles, URIs           |
-| `mi_plugin`  | `mi_nuevo_plugin`| opciones BD, nonces, cron hooks      |
-| `Mi Plugin`  | `Mi Nuevo Plugin`| header del plugin, menú admin         |
+| `MyPlugin`   | `MyNewPlugin`   | namespace, use, autoloader, objeto JS |
+| `my-plugin`  | `my-new-plugin`  | text domain, handles, URIs           |
+| `my_plugin`  | `my_new_plugin`  | opciones BD, nonces, cron hooks      |
+| `My Plugin`  | `My New Plugin`  | header del plugin, menú admin         |
 
 Además renombra `plugin.php` → `mi-nuevo-plugin.php`.
 
@@ -120,22 +120,22 @@ plugin-esqueleto/
 └── languages/                   ← .pot / .po / .mo para traducciones
 ```
 
-## Identificadores derivados del slug `mi-plugin`
+## Identificadores derivados del slug `my-plugin`
 
 | Método                        | Devuelve                    |
 |-------------------------------|-----------------------------|
-| `Config::slug()`              | `mi-plugin`                 |
-| `Config::prefix()`            | `mi_plugin`                 |
-| `Config::text_domain()`       | `mi-plugin`                 |
-| `Config::namespace_root()`    | `MiPlugin`                  |
-| `Config::asset('admin')`      | `mi-plugin-admin`           |
-| `Config::option('version')`   | `mi_plugin_version`         |
-| `Config::nonce('admin')`      | `mi_plugin_admin`           |
-| `Config::cron_hook('sync')`   | `mi_plugin_sync`            |
-| `Config::menu_slug()`         | `mi-plugin-settings`        |
-| `Config::options_group()`     | `mi_plugin_options_group`   |
-| `Config::js_object()`         | `MiPluginAdmin`             |
-| `Config::shortcode()`         | `mi_plugin`                 |
+| `Config::slug()`              | `my-plugin`                 |
+| `Config::prefix()`            | `my_plugin`                 |
+| `Config::text_domain()`       | `my-plugin`                 |
+| `Config::namespace_root()`    | `MyPlugin`                  |
+| `Config::asset('admin')`      | `my-plugin-admin`           |
+| `Config::option('version')`   | `my_plugin_version`         |
+| `Config::nonce('admin')`      | `my_plugin_admin`           |
+| `Config::cron_hook('sync')`   | `my_plugin_sync`            |
+| `Config::menu_slug()`         | `my-plugin-settings`        |
+| `Config::options_group()`     | `my_plugin_options_group`   |
+| `Config::js_object()`         | `MyPluginAdmin`             |
+| `Config::shortcode()`         | `my_plugin`                 |
 
 ## Requisitos
 
@@ -145,5 +145,32 @@ plugin-esqueleto/
 ## Shortcode
 
 ```
-[mi_plugin titulo="Bienvenido" color="#e44d26"]
+[my_plugin title="Bienvenido" color="#e44d26"]
+```
+
+## 🐳 Ejecutar scripts de PHP con Docker (Git Bash / Windows)
+
+Si no tienes PHP instalado localmente, puedes usar Docker para aislar el entorno y ejecutar los scripts del proyecto.
+
+**Requisito:** Tener Docker Desktop ejecutándose.
+
+### 1. Entrar al entorno de PHP
+Abre tu consola Git Bash en la raíz del proyecto y ejecuta este comando para levantar un contenedor temporal con PHP 8.2:
+
+```bash
+winpty docker run -it --rm -v "$PWD":/app -w //app php:8.2-cli bash
+```
+
+### 2. Ejecutar los scripts
+Una vez dentro del contenedor (la consola mostrará algo como `root@...:/app#`), el comando `php` funciona de forma nativa. Por ejemplo, para renombrar el plugin:
+
+```bash
+php bin/rename-plugin.php "
+```
+
+### 3. Salir
+Cuando termines de usar PHP, simplemente cierra el contenedor volviendo a tu consola local con:
+
+```bash
+exit
 ```
